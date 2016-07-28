@@ -63,6 +63,7 @@ ParsedGridGenerator<dim, spacedim>::ParsedGridGenerator(const std::string _secti
                                                         const std::string _double_1,
                                                         const std::string _double_2,
                                                         const std::string _double_3,
+                                                        const std::string _double_4,
                                                         const std::string _int_1,
                                                         const std::string _int_2,
                                                         const std::string _vec_of_int,
@@ -85,6 +86,7 @@ ParsedGridGenerator<dim, spacedim>::ParsedGridGenerator(const std::string _secti
   str_double_1(_double_1),
   str_double_2(_double_2),
   str_double_3(_double_3),
+  str_double_4(_double_4),
   str_un_int_1(_int_1),
   str_un_int_2(_int_2),
   str_vec_int(_vec_of_int)
@@ -95,7 +97,7 @@ ParsedGridGenerator<dim, spacedim>::ParsedGridGenerator(const std::string _secti
 template <int dim, int spacedim>
 std::string ParsedGridGenerator<dim, spacedim>::get_grid_names()
 {
-  return "file|rectangle|hyper_ball|hyper_shell|hyper_sphere|hyper_L|half_hyper_ball|cylinder|truncated_cone|hyper_cross|hyper_cube_slit|half_hyper_shell|quarter_hyper_shell|cylinder_shell|torus|hyper_cube_with_cylindrical_hole|moebius|cheese";
+  return "file|rectangle|hyper_ball|hyper_shell|hyper_sphere|hyper_L|half_hyper_ball|cylinder|truncated_cone|hyper_cross|hyper_cube_slit|half_hyper_shell|quarter_hyper_shell|cylinder_shell|sphere_cylinder_shell|torus|hyper_cube_with_cylindrical_hole|moebius|cheese";
 }
 
 template <int dim, int spacedim>
@@ -176,6 +178,11 @@ void ParsedGridGenerator<dim, spacedim>::declare_parameters(ParameterHandler &pr
                 "	- Optional double : outer radius\n"
                 "	- Optional unsigned int : n_radial_cells\n"
                 "	- Optional unsigned int : n_axial_cells\n"
+                "- sphere_cylinder_shell : produce a domain that is the space between two sphere-cylinders in 2D"
+                "	- Optional double : inner radius\n"
+                "	- Optional double : outer radius\n"
+                "	- Optional double : inner length\n"
+                "	- Optional double : outer length\n"
                 "- moebius : produce a ring of cells in 3d that is cut open, twisted and glued together again. This results in a kind of moebius-loop :\n"
                 "	- Optional unsigned int : number of cells in the loop\n"
                 "	- Optional unsigned int : number of rotations (Pi/2 each) to be performed before gluing the loop together\n"
@@ -230,6 +237,12 @@ void ParsedGridGenerator<dim, spacedim>::declare_parameters(ParameterHandler &pr
 
   add_parameter(prm, &double_option_three,
                 "Optional double 3", str_double_3,
+                Patterns::Double(),
+                "Second additional double to be used in the generation of the grid. "
+                "The use of it will depend on the specific grid.");
+
+  add_parameter(prm, &double_option_four,
+                "Optional double 4", str_double_4,
                 Patterns::Double(),
                 "Second additional double to be used in the generation of the grid. "
                 "The use of it will depend on the specific grid.");
@@ -562,6 +575,14 @@ struct PGGHelper
         // options...
 
         // p->default_manifold_descriptors = "0=CylindricalManifoldOnAxis";
+      }
+    else if (p->grid_name == "sphere_cylinder_shell")
+      {
+        GridGenerator::sphere_cylinder_shell ( tria,
+                                        p->double_option_one,
+                                        p->double_option_two,
+                                        p->double_option_three,
+                                        p->double_option_four);
       }
     else if (p->grid_name == "hyper_cube_with_cylindrical_hole")
       {
