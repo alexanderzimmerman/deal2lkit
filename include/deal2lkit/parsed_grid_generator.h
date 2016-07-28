@@ -176,7 +176,6 @@ public:
                        const std::string opt_double_1="1.0",
                        const std::string opt_double_2="0.5",
                        const std::string opt_double_3="1.5",
-                       const std::string opt_double_4="1.25",
                        const std::string opt_int_1="1",
                        const std::string opt_int_2="2",
                        const std::string opt_vec_of_int="",
@@ -286,12 +285,6 @@ public:
    *   - *double*: outer radius
    *   - *unsigned int*: n_radial_cells
    *   - *unsigned int*: n_axial_cells
-   *
-   * - **sphere_cylinder_shell**-> produce a domain that is the space between two cylinders in 2D
-   *   - *double*: inner radius
-   *   - *double*: outer radius
-   *   - *double*: inner length
-   *   - *double*: outer length
    *
    * - **moebius**-> produce a ring of cells in 3d that is cut open, twisted and glued together again. This results in a kind of m\"oebius-loop:
    *   - *unsigned int*: number of cells in the loop
@@ -442,11 +435,6 @@ private:
   double double_option_three;
 
   /**
-   * Optional double argument. Fourth option.
-   */
-  double double_option_four;
-
-  /**
    * Optional Point argument. First Option.
    */
   Point<spacedim> point_option_one;
@@ -522,7 +510,6 @@ private:
   std::string str_double_1;
   std::string str_double_2;
   std::string str_double_3;
-  std::string str_double_4;
   std::string str_un_int_1;
   std::string str_un_int_2;
   std::string str_vec_int;
