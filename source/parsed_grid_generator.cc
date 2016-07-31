@@ -97,7 +97,7 @@ ParsedGridGenerator<dim, spacedim>::ParsedGridGenerator(const std::string _secti
 template <int dim, int spacedim>
 std::string ParsedGridGenerator<dim, spacedim>::get_grid_names()
 {
-  return "file|rectangle|hyper_ball|hyper_shell|hyper_sphere|hyper_L|half_hyper_ball|cylinder|truncated_cone|hyper_cross|hyper_cube_slit|half_hyper_shell|quarter_hyper_shell|cylinder_shell|sphere_cylinder_shell|torus|hyper_cube_with_cylindrical_hole|moebius|cheese";
+  return "file|rectangle|hyper_ball|hyper_shell|hyper_sphere|hyper_L|half_hyper_ball|cylinder|truncated_cone|hyper_cross|hyper_cube_slit|half_hyper_shell|quarter_hyper_shell|cylinder_shell|torus|hyper_cube_with_cylindrical_hole|hemisphere_cylinder_shell|moebius|cheese";
 }
 
 template <int dim, int spacedim>
@@ -178,7 +178,7 @@ void ParsedGridGenerator<dim, spacedim>::declare_parameters(ParameterHandler &pr
                 "	- Optional double : outer radius\n"
                 "	- Optional unsigned int : n_radial_cells\n"
                 "	- Optional unsigned int : n_axial_cells\n"
-                "- sphere_cylinder_shell : produce a domain that is the space between two sphere-cylinders in 2D"
+                "- hemisphere_cylinder_shell : produce a domain that is the space between two hemisphere-cylinders"
                 "	- Optional double : inner radius\n"
                 "	- Optional double : outer radius\n"
                 "	- Optional double : inner length\n"
@@ -576,14 +576,6 @@ struct PGGHelper
 
         // p->default_manifold_descriptors = "0=CylindricalManifoldOnAxis";
       }
-    else if (p->grid_name == "sphere_cylinder_shell")
-      {
-        GridGenerator::sphere_cylinder_shell ( tria,
-                                        p->double_option_one,
-                                        p->double_option_two,
-                                        p->double_option_three,
-                                        p->double_option_four);
-      }
     else if (p->grid_name == "hyper_cube_with_cylindrical_hole")
       {
         GridGenerator::hyper_cube_with_cylindrical_hole ( tria,
@@ -592,6 +584,14 @@ struct PGGHelper
                                                           p->double_option_three,
                                                           p->un_int_option_one,
                                                           p->colorize);
+      }
+    else if (p->grid_name == "hemisphere_cylinder_shell")
+      {
+        GridGenerator::hemisphere_cylinder_shell ( tria,
+                                        p->double_option_one,
+                                        p->double_option_two,
+                                        p->double_option_three,
+                                        p->double_option_four);
       }
     else if (p->grid_name == "hyper_shell")
       {

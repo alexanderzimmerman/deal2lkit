@@ -287,12 +287,6 @@ public:
    *   - *unsigned int*: n_radial_cells
    *   - *unsigned int*: n_axial_cells
    *
-   * - **sphere_cylinder_shell**-> produce a domain that is the space between two cylinders in 2D
-   *   - *double*: inner radius
-   *   - *double*: outer radius
-   *   - *double*: inner length
-   *   - *double*: outer length
-   *
    * - **moebius**-> produce a ring of cells in 3d that is cut open, twisted and glued together again. This results in a kind of m\"oebius-loop:
    *   - *unsigned int*: number of cells in the loop
    *   - *unsigned int*: number of rotations (Pi/2 each) to be performed before gluing the loop together
@@ -305,6 +299,12 @@ public:
    *   - *double*: length
    *   - *unsigned int*: repetitions (number of subdivisions along the z-direction)
    *   - *bool*: colorize grid
+   *
+   * - **hemisphere_cylinder_shell**-> produce a domain that is the space between two hemisphere-cylinders
+   *   - *double*: inner radius
+   *   - *double*: outer radius
+   *   - *double*: inner length
+   *   - *double*: outer length
    *
    * - **torus**-> produce the surface meshing of the torus:
    *   - *double*: radius of the circle which forms the middle line of the torus containing the loop of cells
