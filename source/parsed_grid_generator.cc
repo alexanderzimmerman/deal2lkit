@@ -64,6 +64,7 @@ ParsedGridGenerator<dim, spacedim>::ParsedGridGenerator(const std::string _secti
                                                         const std::string _double_2,
                                                         const std::string _double_3,
                                                         const std::string _double_4,
+                                                        const std::string _double_5,
                                                         const std::string _int_1,
                                                         const std::string _int_2,
                                                         const std::string _vec_of_int,
@@ -87,6 +88,7 @@ ParsedGridGenerator<dim, spacedim>::ParsedGridGenerator(const std::string _secti
   str_double_2(_double_2),
   str_double_3(_double_3),
   str_double_4(_double_4),
+  str_double_5(_double_5),
   str_un_int_1(_int_1),
   str_un_int_2(_int_2),
   str_vec_int(_vec_of_int)
@@ -183,6 +185,8 @@ void ParsedGridGenerator<dim, spacedim>::declare_parameters(ParameterHandler &pr
                 "	- Optional double : outer radius\n"
                 "	- Optional double : inner length\n"
                 "	- Optional double : outer length\n"
+                "       - Optional Point<dim>: Radial center of sphere\n"
+                "       - Optional vector<double> Cylindrical axis rotation angles\n"
                 "- moebius : produce a ring of cells in 3d that is cut open, twisted and glued together again. This results in a kind of moebius-loop :\n"
                 "	- Optional unsigned int : number of cells in the loop\n"
                 "	- Optional unsigned int : number of rotations (Pi/2 each) to be performed before gluing the loop together\n"
@@ -247,16 +251,22 @@ void ParsedGridGenerator<dim, spacedim>::declare_parameters(ParameterHandler &pr
                 "Second additional double to be used in the generation of the grid. "
                 "The use of it will depend on the specific grid.");
 
+  add_parameter(prm, &double_option_five,
+                "Optional double 5", str_double_5,
+                Patterns::Double(),
+                "Second additional double to be used in the generation of the grid. "
+                "The use of it will depend on the specific grid.");
+  
   add_parameter(prm, &point_option_one,
-                "Optional Point<spacedim> 1", (str_point_1==""?def_point:str_point_1),
-                Patterns::List(Patterns::Double(), spacedim, spacedim),
-                "First additional Point<spacedim> to be used in the generation of the grid. "
+                "Optional Point 1", (str_point_1==""?def_point:str_point_1),
+                Patterns::List(Patterns::Double()),
+                "First additional Point to be used in the generation of the grid. "
                 "The use of it will depend on the specific grid.");
 
   add_parameter(prm, &point_option_two,
-                "Optional Point<spacedim> 2", (str_point_2==""?def_point_2:str_point_2),
-                Patterns::List(Patterns::Double(), spacedim, spacedim),
-                "Second additional Point<spacedim> to be used in the generation of the grid. "
+                "Optional Point 2", (str_point_2==""?def_point_2:str_point_2),
+                Patterns::List(Patterns::Double()),
+                "Second additional Point to be used in the generation of the grid. "
                 "The use of it will depend on the specific grid.");
 
 
@@ -277,7 +287,7 @@ void ParsedGridGenerator<dim, spacedim>::declare_parameters(ParameterHandler &pr
                 Patterns::List(Patterns::Integer(1), dim, dim),
                 "Vector of positive unsigned int to be used in the generation of the grid. "
                 "The use of it will depend on the specific grid.");
-
+  
   add_parameter(prm, &colorize,
                 "Colorize",str_colorize,
                 Patterns::Bool(),
@@ -587,11 +597,19 @@ struct PGGHelper
       }
     else if (p->grid_name == "hemisphere_cylinder_shell")
       {
+        Point<2*dim-1> rigid_transformation_vector;
+        for (int i = 0; i < dim; i++) {
+            rigid_transformation_vector[i] = p->point_option_one[i];
+        }
+        Assert(dim == 2, ExcNotImplemented());
+        rigid_transformation_vector[2] = p->double_option_five; 
         GridGenerator::hemisphere_cylinder_shell ( tria,
                                         p->double_option_one,
                                         p->double_option_two,
                                         p->double_option_three,
-                                        p->double_option_four);
+                                        p->double_option_four,
+                                        rigid_transformation_vector
+                                                 );
       }
     else if (p->grid_name == "hyper_shell")
       {

@@ -177,6 +177,7 @@ public:
                        const std::string opt_double_2="0.5",
                        const std::string opt_double_3="1.5",
                        const std::string opt_double_4="1.25",
+                       const std::string opt_double_5="0.",
                        const std::string opt_int_1="1",
                        const std::string opt_int_2="2",
                        const std::string opt_vec_of_int="",
@@ -305,6 +306,7 @@ public:
    *   - *double*: outer radius
    *   - *double*: inner length
    *   - *double*: outer length
+   *   - *Point<2*dim-1>*: [Radial center of sphere, Cylindrical axis rotation angles]
    *
    * - **torus**-> produce the surface meshing of the torus:
    *   - *double*: radius of the circle which forms the middle line of the torus containing the loop of cells
@@ -447,6 +449,11 @@ private:
   double double_option_four;
 
   /**
+   * Optional double argument. Fifth option.
+   */
+  double double_option_five;
+  
+  /**
    * Optional Point argument. First Option.
    */
   Point<spacedim> point_option_one;
@@ -504,7 +511,7 @@ private:
    * Optional vector of integers.
    */
   std::vector<unsigned int> un_int_vec_option_one;
-
+  
   /**
    * Input grid file name.
    */
@@ -523,6 +530,7 @@ private:
   std::string str_double_2;
   std::string str_double_3;
   std::string str_double_4;
+  std::string str_double_5;
   std::string str_un_int_1;
   std::string str_un_int_2;
   std::string str_vec_int;
